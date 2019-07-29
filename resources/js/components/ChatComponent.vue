@@ -14,10 +14,11 @@
                        placeholder="Enter your message"
                        v-model="newMessage"
                        @keyup.enter="sendMessage"
+                       @keydown="sendTypingEvent"
                 >
 
             </div>
-            <span class="text-muted m-3">user is typing...</span>
+            <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
         </div>
         <div class="col-2 text-center">
             <div class="card card-default">
@@ -41,7 +42,9 @@
           return {
               messages: [],
               newMessage: '',
-              users: []
+              users: [],
+              activeUser: false,
+              typingTimer: false
           }
       },
       created() {
@@ -60,6 +63,15 @@
                 .listen('MessageSent',(event) => {
                     this.messages.push(event.message);
                 })
+                .listenForWhisper('typing', user => {
+                    this.activeUser = user;
+                    if(this.typingTimer) {
+                        clearTimeout(this.typingTimer);
+                    }
+                    this.typingTimer = setTimeout(() => {
+                        this.activeUser = false;
+                    }, 1000);
+                })
       },
         methods: {
         fetchMessages() {
@@ -74,6 +86,11 @@
                 });
                 axios.post('messages', {message: this.newMessage});
                 this.newMessage='';
+                this.activeUser=false;
+            },
+            sendTypingEvent () {
+                Echo.join('chat')
+                    .whisper('typing', this.user);
             }
       }
     }
