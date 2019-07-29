@@ -1872,19 +1872,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
     return {
       messages: [],
-      newMessage: ''
+      newMessage: '',
+      users: []
     };
   },
   created: function created() {
     var _this = this;
 
     this.fetchMessages();
-    Echo.join('chat').listen('MessageSent', function (event) {
+    Echo.join('chat').here(function (user) {
+      _this.users = user;
+    }).joining(function (user) {
+      _this.users.push(user);
+    }).leaving(function (user) {
+      _this.users = _this.users.filter(function (u) {
+        return u.id !== user.id;
+      });
+    }).listen('MessageSent', function (event) {
       _this.messages.push(event.message);
     });
   },
@@ -47520,25 +47531,30 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2 text-center" }, [
+    _c("div", { staticClass: "col-2 text-center" }, [
       _c("div", { staticClass: "card card-default" }, [
         _vm._v("\n            Users\n        ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
-        _c("ul", [_c("li", { staticClass: "py-1" }, [_vm._v("User 1")])])
+        _c(
+          "ul",
+          _vm._l(_vm.users, function(user, index) {
+            return _c("li", { key: index, staticClass: "py-1" }, [
+              _vm._v(
+                "\n                        " +
+                  _vm._s(user.name) +
+                  "\n                "
+              )
+            ])
+          }),
+          0
+        )
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
