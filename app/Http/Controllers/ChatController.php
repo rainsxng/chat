@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Message;
 
@@ -24,9 +25,11 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
-        auth()->user()->messages()->create([
+        $message = auth()->user()->messages()->create([
             'message' => $request->message
         ]);
+
+        broadcast(new MessageSent($message->load('user')));
 
         return ['status' => 'success'];
     }
