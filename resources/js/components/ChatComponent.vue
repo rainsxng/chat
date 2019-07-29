@@ -3,7 +3,7 @@
         <div class="col-10">
             <div class="card card-default">
                 <div class="card-header p-2">Messages</div>
-                <ul class="list-unstyled" style="height:300px; overflow-y:scroll">
+                <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
                         <strong>{{ message.user.name }}</strong>
                         {{ message.message }}
