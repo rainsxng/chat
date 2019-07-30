@@ -4,20 +4,14 @@
 
             <div v-if="users.length !== 0" class="card-body">
                 <div class="card card-default mt-4">
-                    Users
+                    Database users
                 </div>
                 <ul>
                         <li class="py-2" v-for="(user, index) in users" :key="index">
                             <span>{{ user.name }} <br> {{ user.email }} </span>
-                            <button class="btn btn-outline-danger btn-sm">
-                                    <p v-if="user.isMuted">Unmute</p>
-                                <p v-else>Mute</p>
-                            </button>
+                             <mute-btn :user="user"></mute-btn>
 
-                            <button class="btn btn-outline-danger btn-sm">
-                                <p v-if="user.isBanned">Unblock</p>
-                                <p v-else>Block</p>
-                            </button>
+                            <ban-btn :user="user"> </ban-btn>
                         </li>
                 </ul>
             </div>

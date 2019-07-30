@@ -10,13 +10,13 @@
                     </li>
                 </ul>
 
-                <input v-if="!this.user.isMuted" type="text" name="message" class="form-control p-2"
+                <input v-if="!this.user.isMuted" type="text" id="message" name="message" class="form-control p-2"
                        placeholder="Enter your message"
                        v-model="newMessage"
                        @keyup.enter="sendMessage"
                        @keydown="sendTypingEvent"
                 >
-                <p v-else>You muted , fool</p>
+                <p v-else>You muted</p>
 
 
             </div>
@@ -24,12 +24,15 @@
         </div>
         <div class="col-4 text-center">
             <div class="card card-default">
-                Users
+                Online users
             </div>
             <div class="card-body">
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
-                            <span>{{ user.name }} </span> <button v-if="checkIsAdmin()" class="btn btn-sm btn-outline-danger ml-2">Block</button> <button v-if="checkIsAdmin()" class="btn btn-sm btn-outline-danger ml-2">Mute</button>
+                            <span>{{ user.name }} </span> <div v-if="checkIsAdmin()">
+                            <mute-btn :user="user"></mute-btn>
+                            <ban-btn :user="user"></ban-btn>
+                        </div>
                         </li>
                 </ul>
             </div>
@@ -92,6 +95,10 @@
                 axios.post('messages', {message: this.newMessage});
                 this.newMessage='';
                 this.activeUser=false;
+                $('#message').prop("disabled", true);
+                setTimeout(() => {
+                    $('#message').prop("disabled", false);
+                }, 15000)
             },
             sendTypingEvent () {
                 Echo.join('chat')

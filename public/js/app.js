@@ -1829,6 +1829,28 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user']
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatComponent.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatComponent.vue?vue&type=script&lang=js& ***!
@@ -1838,6 +1860,9 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -1937,11 +1962,37 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.newMessage = '';
       this.activeUser = false;
+      $('#message').prop("disabled", true);
+      setTimeout(function () {
+        $('#message').prop("disabled", false);
+      }, 15000);
     },
     sendTypingEvent: function sendTypingEvent() {
       Echo.join('chat').whisper('typing', this.user);
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user']
 });
 
 /***/ }),
@@ -1955,12 +2006,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -47594,6 +47639,34 @@ return VueChatScroll;
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("button", { staticClass: "btn btn-sm btn-outline-danger" }, [
+    _vm.user.isBanned
+      ? _c("span", [_vm._v("Ban")])
+      : _c("span", [_vm._v("Unban")])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatComponent.vue?vue&type=template&id=80d584ac&":
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatComponent.vue?vue&type=template&id=80d584ac& ***!
@@ -47647,6 +47720,7 @@ var render = function() {
               staticClass: "form-control p-2",
               attrs: {
                 type: "text",
+                id: "message",
                 name: "message",
                 placeholder: "Enter your message"
               },
@@ -47670,7 +47744,7 @@ var render = function() {
                 }
               }
             })
-          : _c("p", [_vm._v("You muted , fool")])
+          : _c("p", [_vm._v("You muted")])
       ]),
       _vm._v(" "),
       _vm.activeUser
@@ -47682,7 +47756,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-4 text-center" }, [
       _c("div", { staticClass: "card card-default" }, [
-        _vm._v("\n            Users\n        ")
+        _vm._v("\n            Online users\n        ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -47694,17 +47768,13 @@ var render = function() {
               _vm._v(" "),
               _vm.checkIsAdmin()
                 ? _c(
-                    "button",
-                    { staticClass: "btn btn-sm btn-outline-danger ml-2" },
-                    [_vm._v("Block")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.checkIsAdmin()
-                ? _c(
-                    "button",
-                    { staticClass: "btn btn-sm btn-outline-danger ml-2" },
-                    [_vm._v("Mute")]
+                    "div",
+                    [
+                      _c("mute-btn", { attrs: { user: user } }),
+                      _vm._v(" "),
+                      _c("ban-btn", { attrs: { user: user } })
+                    ],
+                    1
                   )
                 : _vm._e()
             ])
@@ -47713,6 +47783,34 @@ var render = function() {
         )
       ])
     ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("button", { staticClass: "btn btn-sm btn-outline-danger" }, [
+    _vm.user.isMuted
+      ? _c("span", [_vm._v("Unmute")])
+      : _c("span", [_vm._v("Mute")])
   ])
 }
 var staticRenderFns = []
@@ -47742,39 +47840,28 @@ var render = function() {
       _vm.users.length !== 0
         ? _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "card card-default mt-4" }, [
-              _vm._v("\n                Users\n            ")
+              _vm._v("\n                Database users\n            ")
             ]),
             _vm._v(" "),
             _c(
               "ul",
               _vm._l(_vm.users, function(user, index) {
-                return _c("li", { key: index, staticClass: "py-2" }, [
-                  _c("span", [
-                    _vm._v(_vm._s(user.name) + " "),
-                    _c("br"),
-                    _vm._v(" " + _vm._s(user.email) + " ")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-outline-danger btn-sm" },
-                    [
-                      user.isMuted
-                        ? _c("p", [_vm._v("Unmute")])
-                        : _c("p", [_vm._v("Mute")])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-outline-danger btn-sm" },
-                    [
-                      user.isBanned
-                        ? _c("p", [_vm._v("Unblock")])
-                        : _c("p", [_vm._v("Block")])
-                    ]
-                  )
-                ])
+                return _c(
+                  "li",
+                  { key: index, staticClass: "py-2" },
+                  [
+                    _c("span", [
+                      _vm._v(_vm._s(user.name) + " "),
+                      _c("br"),
+                      _vm._v(" " + _vm._s(user.email) + " ")
+                    ]),
+                    _vm._v(" "),
+                    _c("mute-btn", { attrs: { user: user } }),
+                    _vm._v(" "),
+                    _c("ban-btn", { attrs: { user: user } })
+                  ],
+                  1
+                )
               }),
               0
             )
@@ -59959,6 +60046,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 Vue.use(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default.a);
 Vue.component('chat', __webpack_require__(/*! ./components/ChatComponent.vue */ "./resources/js/components/ChatComponent.vue")["default"]);
 Vue.component('user-list', __webpack_require__(/*! ./components/UserListComponent.vue */ "./resources/js/components/UserListComponent.vue")["default"]);
+Vue.component('muteBtn', __webpack_require__(/*! ./components/MuteButtonComponent.vue */ "./resources/js/components/MuteButtonComponent.vue")["default"]);
+Vue.component('banBtn', __webpack_require__(/*! ./components/BanButtonComponent.vue */ "./resources/js/components/BanButtonComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -60035,6 +60124,75 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 
 /***/ }),
 
+/***/ "./resources/js/components/BanButtonComponent.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/BanButtonComponent.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BanButtonComponent.vue?vue&type=template&id=d78734f2& */ "./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2&");
+/* harmony import */ var _BanButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BanButtonComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BanButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/BanButtonComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BanButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./BanButtonComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BanButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BanButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./BanButtonComponent.vue?vue&type=template&id=d78734f2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BanButtonComponent.vue?vue&type=template&id=d78734f2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BanButtonComponent_vue_vue_type_template_id_d78734f2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/ChatComponent.vue":
 /*!***************************************************!*\
   !*** ./resources/js/components/ChatComponent.vue ***!
@@ -60099,6 +60257,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatComponent_vue_vue_type_template_id_80d584ac___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatComponent_vue_vue_type_template_id_80d584ac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/MuteButtonComponent.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/MuteButtonComponent.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MuteButtonComponent.vue?vue&type=template&id=8d84b912& */ "./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912&");
+/* harmony import */ var _MuteButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MuteButtonComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MuteButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/MuteButtonComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MuteButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./MuteButtonComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MuteButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MuteButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./MuteButtonComponent.vue?vue&type=template&id=8d84b912& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MuteButtonComponent.vue?vue&type=template&id=8d84b912&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MuteButtonComponent_vue_vue_type_template_id_8d84b912___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
