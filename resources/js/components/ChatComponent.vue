@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-8">
+        <div class="col-5">
             <div class="card card-default">
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
@@ -10,12 +10,14 @@
                     </li>
                 </ul>
 
-                <input type="text" name="message" class="form-control p-2"
+                <input v-if="!this.user.isMuted" type="text" name="message" class="form-control p-2"
                        placeholder="Enter your message"
                        v-model="newMessage"
                        @keyup.enter="sendMessage"
                        @keydown="sendTypingEvent"
                 >
+                <p v-else>You muted , fool</p>
+
 
             </div>
             <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
@@ -52,7 +54,7 @@
 
             Echo.join('chat')
                 .here(user => {
-                    this.users = user;
+                    this.users = user.filter(u => u.id !== this.user.id);
                 })
                 .joining(user => {
                     this.users.push(user);
@@ -92,7 +94,6 @@
                 this.activeUser=false;
             },
             sendTypingEvent () {
-            console.log(this.user.role === 'admin');
                 Echo.join('chat')
                     .whisper('typing', this.user);
             }

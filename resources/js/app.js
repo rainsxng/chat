@@ -23,7 +23,7 @@ import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
 Vue.component('chat', require('./components/ChatComponent.vue').default);
-
+Vue.component('user-list', require('./components/UserListComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
