@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-10">
+        <div class="col-8">
             <div class="card card-default">
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
@@ -20,15 +20,15 @@
             </div>
             <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
         </div>
-        <div class="col-2 text-center">
+        <div class="col-4 text-center">
             <div class="card card-default">
                 Users
             </div>
             <div class="card-body">
                 <ul>
-                    <li class="py-1" v-for="(user, index) in users" :key="index">
-                            {{ user.name }}
-                    </li>
+                        <li class="py-1" v-for="(user, index) in users" :key="index">
+                            <span>{{ user.name }} </span> <button v-if="checkIsAdmin()" class="btn btn-sm btn-outline-danger ml-2">Block</button> <button v-if="checkIsAdmin()" class="btn btn-sm btn-outline-danger ml-2">Mute</button>
+                        </li>
                 </ul>
             </div>
         </div>
@@ -79,6 +79,9 @@
                     this.messages = response.data;
             })
         },
+            checkIsAdmin ( ) {
+               return this.user.role === 'admin';
+            },
             sendMessage() {
                 this.messages.push({
                     user: this.user,
@@ -89,6 +92,7 @@
                 this.activeUser=false;
             },
             sendTypingEvent () {
+            console.log(this.user.role === 'admin');
                 Echo.join('chat')
                     .whisper('typing', this.user);
             }

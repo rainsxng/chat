@@ -1920,6 +1920,9 @@ __webpack_require__.r(__webpack_exports__);
         _this2.messages = response.data;
       });
     },
+    checkIsAdmin: function checkIsAdmin() {
+      return this.user.role === 'admin';
+    },
     sendMessage: function sendMessage() {
       this.messages.push({
         user: this.user,
@@ -1932,6 +1935,7 @@ __webpack_require__.r(__webpack_exports__);
       this.activeUser = false;
     },
     sendTypingEvent: function sendTypingEvent() {
+      console.log(this.user.role === 'admin');
       Echo.join('chat').whisper('typing', this.user);
     }
   }
@@ -47560,7 +47564,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-10" }, [
+    _c("div", { staticClass: "col-8" }, [
       _c("div", { staticClass: "card card-default" }, [
         _c("div", { staticClass: "card-header p-2" }, [_vm._v("Messages")]),
         _vm._v(" "),
@@ -47628,7 +47632,7 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-2 text-center" }, [
+    _c("div", { staticClass: "col-4 text-center" }, [
       _c("div", { staticClass: "card card-default" }, [
         _vm._v("\n            Users\n        ")
       ]),
@@ -47638,11 +47642,23 @@ var render = function() {
           "ul",
           _vm._l(_vm.users, function(user, index) {
             return _c("li", { key: index, staticClass: "py-1" }, [
-              _vm._v(
-                "\n                        " +
-                  _vm._s(user.name) +
-                  "\n                "
-              )
+              _c("span", [_vm._v(_vm._s(user.name) + " ")]),
+              _vm._v(" "),
+              _vm.checkIsAdmin()
+                ? _c(
+                    "button",
+                    { staticClass: "btn btn-sm btn-outline-danger ml-2" },
+                    [_vm._v("Block")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.checkIsAdmin()
+                ? _c(
+                    "button",
+                    { staticClass: "btn btn-sm btn-outline-danger ml-2" },
+                    [_vm._v("Mute")]
+                  )
+                : _vm._e()
             ])
           }),
           0

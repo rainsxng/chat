@@ -33,6 +33,11 @@ return [
     'sparkpost' => [
         'secret' => env('SPARKPOST_SECRET'),
     ],
+    'google' => [
+        'client_id' => '571141228518-vqmh6j6c7088o34p42qgiprbhldkc3od.apps.googleusercontent.com',
+        'client_secret' => 'k3B5UlAOYO-MyIZ9s91W5C6b',
+        'redirect' => 'http://localhost:8000/callback'
+    ],
 
     'stripe' => [
         'model' => App\User::class,

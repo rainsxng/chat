@@ -24,3 +24,8 @@ Route::get('chat','ChatController@index')->name('chat.index');
 Route::get('/messages','ChatController@fetchMessages');
 
 Route::post('/messages', 'ChatController@sendMessage');
+
+Route::get('/redirect', 'SocialAuthGoogleController@redirect');
+
+Route::get('/callback', 'SocialAuthGoogleController@callback');
+
