@@ -14,10 +14,12 @@
         methods: {
           banUser() {
              if (!this.user.isBanned) {
+                 this.user.isBanned = true;
                  axios.put('ban', { user: this.user } )
              }
              else {
-                 console.log('banned');
+                 this.user.isBanned = false;
+                 axios.put('unban', { user: this.user } );
              }
           }
         }

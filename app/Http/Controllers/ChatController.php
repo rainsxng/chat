@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Events\UserBanned;
+use App\Events\UserUnbanned;
 use App\User;
 use Illuminate\Http\Request;
 use App\Message;
@@ -50,6 +51,15 @@ class ChatController extends Controller
         $user->save();
         session()->flash('error', 'You has been banned at this chat');
         broadcast(new UserBanned($user))->toOthers();
+        return ['status' => 'success'];
+    }
+
+    public function unbanUser(Request $request)
+    {
+        $user = User::findOrFail($request->input('user.id'));
+        $user->isBanned = false;
+        $user->save();
+        broadcast(new UserUnbanned($user))->toOthers();
         return ['status' => 'success'];
     }
 }

@@ -1851,11 +1851,15 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     banUser: function banUser() {
       if (!this.user.isBanned) {
+        this.user.isBanned = true;
         axios.put('ban', {
           user: this.user
         });
       } else {
-        console.log('banned');
+        this.user.isBanned = false;
+        axios.put('unban', {
+          user: this.user
+        });
       }
     }
   }
@@ -1955,7 +1959,7 @@ __webpack_require__.r(__webpack_exports__);
     Echo.join('banned').listen('UserBanned', function (event) {
       if (_this.user.id === event.user.id) {
         Echo.disconnect();
-        window.location.replace("/");
+        window.location.replace("/home");
       }
     });
   },

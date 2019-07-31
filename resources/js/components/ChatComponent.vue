@@ -81,7 +81,7 @@
                  .listen('UserBanned',(event) => {
                   if (this.user.id === event.user.id) {
                       Echo.disconnect();
-                      window.location.replace("/");
+                      window.location.replace("/home");
                   }
               })
       },
