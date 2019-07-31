@@ -57,7 +57,7 @@
 
             Echo.join('chat')
                 .here(user => {
-                    this.users = user.filter(u => u.id !== this.user.id);
+                    this.users = user;
                 })
                 .joining(user => {
                     this.users.push(user);

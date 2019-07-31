@@ -24,7 +24,7 @@ class ChatController extends Controller
             return view('chat.index')->with('users', User::where('role', '!=','admin')->get());
         if (auth()->user()->isBanned) {
             session()->flash('error', 'You has been banned at this chat');
-            return redirect()->back();
+            return redirect('/home');
         }
         return view('chat.index');
     }

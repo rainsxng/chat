@@ -1926,9 +1926,7 @@ __webpack_require__.r(__webpack_exports__);
     this.currentUser = this.user;
     this.fetchMessages();
     Echo.join('chat').here(function (user) {
-      _this.users = user.filter(function (u) {
-        return u.id !== _this.user.id;
-      });
+      _this.users = user;
     }).joining(function (user) {
       _this.users.push(user);
     }).leaving(function (user) {

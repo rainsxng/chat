@@ -14,9 +14,9 @@
                         </div>
                     @endif
 
-                        @if(session()->has('error'))
+                        @if(auth()->user()->isBanned)
                             <div class=" alert alert-danger">
-                                {{ session()->get('error') }}
+                                You was  banned in a chat by an admin
                             </div>
                         @endif
 
