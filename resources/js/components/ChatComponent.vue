@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-5">
+        <div class="col-6">
             <div class="card card-default">
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
@@ -22,17 +22,15 @@
             </div>
             <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <div class="card card-default">
                 <span class="text-center">Online users</span>
             </div>
             <div class="card-body">
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
-                            <span>{{ user.name }} </span> <span v-if="checkIsAdmin()">
-                            <mute-btn :user="user"></mute-btn>
-                            <ban-btn :user="user"></ban-btn>
-                        </span>
+                            <span>{{ user.name }} </span> <br>
+                            <span v-if="checkIsAdmin()">{{ user.email }}</span>
                         </li>
                 </ul>
             </div>

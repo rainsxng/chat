@@ -33,3 +33,5 @@ Route::put('/ban', 'ChatController@banUser');
 
 Route::put('/unban', 'ChatController@unbanUser');
 
+Route::put('mute', 'ChatController@muteUser');
+
