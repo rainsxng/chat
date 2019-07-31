@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Events\UserBanned;
+use App\Events\UserMuted;
 use App\Events\UserUnbanned;
+use App\Events\UserUnmuted;
 use App\User;
 use Illuminate\Http\Request;
 use App\Message;
@@ -47,19 +49,24 @@ class ChatController extends Controller
     public function banUser(Request $request)
     {
         $user = User::findOrFail($request->input('user.id'));
-        $user->isBanned = true;
+        $user->isBanned = !$user->isBanned;
         $user->save();
-        session()->flash('error', 'You has been banned at this chat');
-        broadcast(new UserBanned($user))->toOthers();
+        if ($user->isBanned) {
+            session()->flash('error', 'You has been banned at this chat');
+            broadcast(new UserBanned($user))->toOthers();
+        }
+        else {
+            broadcast(new UserUnbanned($user))->toOthers();
+        }
         return ['status' => 'success'];
     }
 
-    public function unbanUser(Request $request)
+    public function muteUser(Request $request)
     {
         $user = User::findOrFail($request->input('user.id'));
-        $user->isBanned = false;
+        $user->isMuted = !$user->isMuted;
         $user->save();
-        broadcast(new UserUnbanned($user))->toOthers();
+        broadcast(new UserMuted($user))->toOthers();
         return ['status' => 'success'];
     }
 }

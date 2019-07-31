@@ -11,7 +11,7 @@
         methods: {
             muteUser() {
                     this.user.isMuted = !this.user.isMuted;
-                  //  axios.put('mute', { user: this.user } )
+                    axios.put('mute', { user: this.user } )
             }
         }
     }

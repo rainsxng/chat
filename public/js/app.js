@@ -1849,17 +1849,10 @@ __webpack_require__.r(__webpack_exports__);
   props: ['user'],
   methods: {
     banUser: function banUser() {
-      if (!this.user.isBanned) {
-        this.user.isBanned = true;
-        axios.put('ban', {
-          user: this.user
-        });
-      } else {
-        this.user.isBanned = false;
-        axios.put('unban', {
-          user: this.user
-        });
-      }
+      this.user.isBanned = !this.user.isBanned;
+      axios.put('ban', {
+        user: this.user
+      });
     }
   }
 });
@@ -1919,6 +1912,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['user'],
   data: function data() {
     return {
+      currentUser: [],
       messages: [],
       newMessage: '',
       users: [],
@@ -1929,6 +1923,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    this.currentUser = this.user;
     this.fetchMessages();
     Echo.join('chat').here(function (user) {
       _this.users = user.filter(function (u) {
@@ -1952,11 +1947,14 @@ __webpack_require__.r(__webpack_exports__);
       _this.typingTimer = setTimeout(function () {
         _this.activeUser = false;
       }, 1000);
-    });
-    Echo.join('banned').listen('UserBanned', function (event) {
+    }).listen('UserBanned', function (event) {
       if (_this.user.id === event.user.id) {
         Echo.disconnect();
-        window.location.replace("/home");
+        window.location.href = "/home";
+      }
+    }).listen('UserMuted', function (event) {
+      if (_this.user.id === event.user.id) {
+        _this.currentUser.isMuted = !_this.currentUser.isMuted;
       }
     });
   },
@@ -2014,7 +2012,10 @@ __webpack_require__.r(__webpack_exports__);
   props: ['user'],
   methods: {
     muteUser: function muteUser() {
-      this.user.isMuted = !this.user.isMuted; //  axios.put('mute', { user: this.user } )
+      this.user.isMuted = !this.user.isMuted;
+      axios.put('mute', {
+        user: this.user
+      });
     }
   }
 });
@@ -47743,7 +47744,7 @@ var render = function() {
           0
         ),
         _vm._v(" "),
-        !this.user.isMuted
+        !this.currentUser.isMuted
           ? _c("input", {
               directives: [
                 {
@@ -60380,15 +60381,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*******************************************************!*\
   !*** ./resources/js/components/UserListComponent.vue ***!
   \*******************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UserListComponent_vue_vue_type_template_id_22f71719___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserListComponent.vue?vue&type=template&id=22f71719& */ "./resources/js/components/UserListComponent.vue?vue&type=template&id=22f71719&");
 /* harmony import */ var _UserListComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserListComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/UserListComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _UserListComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _UserListComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -60418,7 +60418,7 @@ component.options.__file = "resources/js/components/UserListComponent.vue"
 /*!********************************************************************************!*\
   !*** ./resources/js/components/UserListComponent.vue?vue&type=script&lang=js& ***!
   \********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

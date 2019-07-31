@@ -7,18 +7,12 @@
 
 <script>
     export default {
-      props:['user'],
+        props: ['user'],
         methods: {
-          banUser() {
-             if (!this.user.isBanned) {
-                 this.user.isBanned = true;
-                 axios.put('ban', { user: this.user } )
-             }
-             else {
-                 this.user.isBanned = false;
-                 axios.put('unban', { user: this.user } );
-             }
-          }
+            banUser() {
+                this.user.isBanned = !this.user.isBanned;
+                axios.put('ban', {user: this.user})
+            }
         }
     }
 </script>

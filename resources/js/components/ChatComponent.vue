@@ -9,7 +9,7 @@
                         <span>{{ message.message }}</span>
                     </li>
                 </ul>
-                <input v-if="!this.user.isMuted" type="text" id="message" name="message" class="form-control p-2"
+                <input v-if="!this.currentUser.isMuted" type="text" id="message" name="message" class="form-control p-2"
                        placeholder="Enter your message"
                        v-model="newMessage"
                        @keyup.enter="sendMessage"
@@ -43,6 +43,7 @@
       props:['user'],
       data(){
           return {
+              currentUser : [],
               messages: [],
               newMessage: '',
               users: [],
@@ -51,6 +52,7 @@
           }
       },
       created() {
+            this.currentUser = this.user;
             this.fetchMessages();
 
             Echo.join('chat')
@@ -74,14 +76,18 @@
                     this.typingTimer = setTimeout(() => {
                         this.activeUser = false;
                     }, 1000);
-                });
-                Echo.join('banned')
-                 .listen('UserBanned',(event) => {
+                })
+                .listen('UserBanned',(event) => {
                   if (this.user.id === event.user.id) {
                       Echo.disconnect();
-                      window.location.replace("/home");
+                      window.location.href = "/home";
                   }
               })
+                .listen('UserMuted', ( event ) => {
+                    if (this.user.id === event.user.id) {
+                        this.currentUser.isMuted = !this.currentUser.isMuted;
+                    }
+                })
       },
         methods: {
         fetchMessages() {

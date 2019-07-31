@@ -33,6 +33,6 @@ class UserUnbanned implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('banned');
+        return new PresenceChannel('chat');
     }
 }
