@@ -64,6 +64,11 @@
         </style>
     </head>
     <body>
+    @if(session()->has('error'))
+        <div class=" alert alert-danger">
+            {{ session()->get('error') }}
+        </div>
+    @endif
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

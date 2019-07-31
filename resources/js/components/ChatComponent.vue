@@ -76,7 +76,14 @@
                     this.typingTimer = setTimeout(() => {
                         this.activeUser = false;
                     }, 1000);
-                })
+                });
+                Echo.join('banned')
+                 .listen('UserBanned',(event) => {
+                  if (this.user.id === event.user.id) {
+                      Echo.disconnect();
+                      window.location.replace("/");
+                  }
+              })
       },
         methods: {
         fetchMessages() {

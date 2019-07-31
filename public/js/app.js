@@ -1847,11 +1847,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
-  created: function created() {
-    Echo.join('chat').listen('UserBanned', function (event) {
-      console.log('1');
-    });
-  },
+  created: function created() {},
   methods: {
     banUser: function banUser() {
       if (!this.user.isBanned) {
@@ -1955,6 +1951,12 @@ __webpack_require__.r(__webpack_exports__);
       _this.typingTimer = setTimeout(function () {
         _this.activeUser = false;
       }, 1000);
+    });
+    Echo.join('banned').listen('UserBanned', function (event) {
+      if (_this.user.id === event.user.id) {
+        Echo.disconnect();
+        window.location.replace("/");
+      }
     });
   },
   methods: {
