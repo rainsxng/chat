@@ -6,33 +6,33 @@
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
                         <strong>{{ message.user.name }}</strong>
-                        {{ message.message }}
+                        <span>{{ message.message }}</span>
                     </li>
                 </ul>
-
                 <input v-if="!this.user.isMuted" type="text" id="message" name="message" class="form-control p-2"
                        placeholder="Enter your message"
                        v-model="newMessage"
                        @keyup.enter="sendMessage"
                        @keydown="sendTypingEvent"
+                       maxlength="200"
                 >
-                <p v-else>You muted</p>
+                <p class="ml-2" v-else>You muted</p>
 
 
             </div>
             <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-4">
             <div class="card card-default">
-                Online users
+                <span class="text-center">Online users</span>
             </div>
             <div class="card-body">
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
-                            <span>{{ user.name }} </span> <div v-if="checkIsAdmin()">
+                            <span>{{ user.name }} </span> <span v-if="checkIsAdmin()">
                             <mute-btn :user="user"></mute-btn>
                             <ban-btn :user="user"></ban-btn>
-                        </div>
+                        </span>
                         </li>
                 </ul>
             </div>

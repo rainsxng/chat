@@ -1846,7 +1846,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user']
+  props: ['user'],
+  created: function created() {
+    Echo.join('chat').listen('UserBanned', function (event) {
+      console.log('1');
+    });
+  },
+  methods: {
+    banUser: function banUser() {
+      if (!this.user.isBanned) {
+        axios.put('ban', {
+          user: this.user
+        });
+      } else {
+        console.log('banned');
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -47654,11 +47670,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("button", { staticClass: "btn btn-sm btn-outline-danger" }, [
-    _vm.user.isBanned
-      ? _c("span", [_vm._v("Ban")])
-      : _c("span", [_vm._v("Unban")])
-  ])
+  return _c(
+    "button",
+    {
+      staticClass: "btn btn-sm btn-outline-danger ml-2 mr-2",
+      on: { click: _vm.banUser }
+    },
+    [
+      _vm.user.isBanned
+        ? _c("span", [_vm._v("Unban")])
+        : _c("span", [_vm._v("Ban")])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47697,11 +47720,8 @@ var render = function() {
           _vm._l(_vm.messages, function(message, index) {
             return _c("li", { key: index, staticClass: "p-2" }, [
               _c("strong", [_vm._v(_vm._s(message.user.name))]),
-              _vm._v(
-                "\n                    " +
-                  _vm._s(message.message) +
-                  "\n                "
-              )
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(message.message))])
             ])
           }),
           0
@@ -47722,7 +47742,8 @@ var render = function() {
                 type: "text",
                 id: "message",
                 name: "message",
-                placeholder: "Enter your message"
+                placeholder: "Enter your message",
+                maxlength: "200"
               },
               domProps: { value: _vm.newMessage },
               on: {
@@ -47744,7 +47765,7 @@ var render = function() {
                 }
               }
             })
-          : _c("p", [_vm._v("You muted")])
+          : _c("p", { staticClass: "ml-2" }, [_vm._v("You muted")])
       ]),
       _vm._v(" "),
       _vm.activeUser
@@ -47754,10 +47775,8 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-4 text-center" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _vm._v("\n            Online users\n        ")
-      ]),
+    _c("div", { staticClass: "col-4" }, [
+      _vm._m(0),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c(
@@ -47768,7 +47787,7 @@ var render = function() {
               _vm._v(" "),
               _vm.checkIsAdmin()
                 ? _c(
-                    "div",
+                    "span",
                     [
                       _c("mute-btn", { attrs: { user: user } }),
                       _vm._v(" "),
@@ -47785,7 +47804,16 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card card-default" }, [
+      _c("span", { staticClass: "text-center" }, [_vm._v("Online users")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -47807,11 +47835,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("button", { staticClass: "btn btn-sm btn-outline-danger" }, [
-    _vm.user.isMuted
-      ? _c("span", [_vm._v("Unmute")])
-      : _c("span", [_vm._v("Mute")])
-  ])
+  return _c(
+    "button",
+    { staticClass: "btn btn-sm btn-outline-danger ml-2 mr-2" },
+    [
+      _vm.user.isMuted
+        ? _c("span", [_vm._v("Unmute")])
+        : _c("span", [_vm._v("Mute")])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

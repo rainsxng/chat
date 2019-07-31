@@ -29,3 +29,5 @@ Route::get('/redirect', 'SocialAuthGoogleController@redirect');
 
 Route::get('/callback', 'SocialAuthGoogleController@callback');
 
+Route::put('/ban', 'ChatController@banUser');
+
