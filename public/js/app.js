@@ -1961,8 +1961,14 @@ __webpack_require__.r(__webpack_exports__);
         location.reload();
       }
     }).listen('UserMuted', function (event) {
+      _this.users.forEach(function (chatUser) {
+        if (chatUser.id === event.user.id) {
+          chatUser.isMuted = event.user.isMuted;
+        }
+      });
+
       if (_this.user.id === event.user.id) {
-        _this.currentUser.isMuted = !_this.currentUser.isMuted;
+        _this.currentUser.isMuted = event.user.isMuted;
       }
     });
   },
@@ -2064,7 +2070,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['users'],
   created: function created() {
+    var _this = this;
+
     this.dbUsers = this.users;
+    Echo.join('chat').listen('UserMuted', function (event) {
+      _this.dbUsers.forEach(function (dbUser) {
+        if (dbUser.id === event.user.id) {
+          dbUser.isMuted = event.user.isMuted;
+        }
+      });
+    }).listen('UserBanned', function (event) {
+      _this.dbUsers.forEach(function (dbUser) {
+        if (dbUser.id === event.user.id) {
+          dbUser.isBanned = event.user.isBanned;
+        }
+      });
+    });
   },
   data: function data() {
     return {

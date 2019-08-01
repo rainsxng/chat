@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Events\UserBanned;
+use App\Events\UserListUserBanned;
+use App\Events\UserListUserMuted;
 use App\Events\UserMuted;
 use App\Events\UserUnbanned;
 use App\Events\UserUnmuted;
@@ -51,7 +53,7 @@ class ChatController extends Controller
         $user = User::findOrFail($request->input('user.id'));
         $user->isBanned = !$user->isBanned;
         $user->save();
-        broadcast(new UserBanned($user))->toOthers();
+        broadcast(new UserBanned($user));
         return ['status' => 'success'];
     }
 
@@ -60,7 +62,7 @@ class ChatController extends Controller
         $user = User::findOrFail($request->input('user.id'));
         $user->isMuted = !$user->isMuted;
         $user->save();
-        broadcast(new UserMuted($user))->toOthers();
+        broadcast(new UserMuted($user));
         return ['status' => 'success'];
     }
 }

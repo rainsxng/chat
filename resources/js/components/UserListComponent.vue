@@ -25,6 +25,22 @@
         props:['users'],
         created () {
             this.dbUsers = this.users;
+            Echo.join('chat')
+                .listen('UserMuted' , ( event ) => {
+                    this.dbUsers.forEach((dbUser) => {
+                        if (dbUser.id === event.user.id) {
+                            dbUser.isMuted = event.user.isMuted;
+                        }
+                    })
+                })
+                .listen('UserBanned' , ( event ) => {
+                    this.dbUsers.forEach((dbUser) => {
+                        if (dbUser.id === event.user.id) {
+                            dbUser.isBanned = event.user.isBanned;
+                        }
+                    })
+                })
+
         },
         data() {
             return {

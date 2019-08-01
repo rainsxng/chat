@@ -93,9 +93,14 @@
                       location.reload();
                   }
               })
-                .listen('UserMuted', ( event ) => {
+                .listen('UserMuted' , ( event ) => {
+                    this.users.forEach((chatUser) => {
+                        if (chatUser.id === event.user.id) {
+                            chatUser.isMuted = event.user.isMuted;
+                        }
+                    });
                     if (this.user.id === event.user.id) {
-                        this.currentUser.isMuted = !this.currentUser.isMuted;
+                        this.currentUser.isMuted = event.user.isMuted;
                     }
                 })
       },
