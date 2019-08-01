@@ -27,10 +27,11 @@ class SocialAuthGoogleController extends Controller
                 $user->name = $googleUser->name;
                 $user->email = $googleUser->email;
                 $user->google_id = $googleUser->id;
+                $user->color = User::getRandColor();
                 $user->save();
                 Auth::loginUsingId($user->id);
             }
-            return redirect()->to('/home');
+            return redirect()->to('/chat');
         } catch (Exception $e) {
             return 'error';
         }

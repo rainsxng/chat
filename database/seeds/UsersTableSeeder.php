@@ -15,7 +15,8 @@ class UsersTableSeeder extends Seeder
            'name' => 'admin',
            'email' => 'admin@gmail.com',
            'role' => 'admin',
-           'password' => bcrypt('password')
+           'password' => bcrypt('password'),
+            'color' => \App\User::getRandColor(),
         ]);
     }
 }

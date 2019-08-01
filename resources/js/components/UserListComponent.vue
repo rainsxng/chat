@@ -8,7 +8,7 @@
                 </div>
                 <ul>
                     <li class="py-2" v-for="(user, index) in dbUsers" :key="index">
-                        <span>{{ user.name }} <br> {{ user.email }} </span>
+                        <span v-bind:style="{ color: user.color }">{{ user.name }}</span> <br> <span>{{ user.email }} </span>
                         <mute-btn :user="user"></mute-btn>
 
                         <ban-btn :user="user"> </ban-btn>

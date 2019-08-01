@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('isMuted')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->string('color')->default('black');
             $table->rememberToken();
             $table->timestamps();
         });

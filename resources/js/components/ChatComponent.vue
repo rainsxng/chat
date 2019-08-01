@@ -1,3 +1,10 @@
+<style scoped>
+    .muted {
+        color:red;
+        font-size: 16px;
+    }
+</style>
+
 <template>
     <div class="row">
         <div class="col-6">
@@ -5,8 +12,8 @@
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
-                        <strong>{{ message.user.name }}</strong>
-                        <span>{{ message.message }}</span>
+                        <strong class="mr-1" v-bind:style="{ color: message.user.color }" >{{ message.user.name }}  </strong> <b>:</b>
+                        <span v-bind:style="{ color: message.user.color }">{{ message.message }}</span>
                     </li>
                 </ul>
                 <input v-if="!this.currentUser.isMuted" type="text" id="message" name="message" class="form-control p-2"
@@ -16,7 +23,7 @@
                        @keydown="sendTypingEvent"
                        maxlength="200"
                 >
-                <p class="ml-2" v-else>You muted</p>
+                <p class="ml-2 muted" v-else>You muted</p>
 
 
             </div>
@@ -29,7 +36,7 @@
             <div class="card-body">
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
-                            <span>{{ user.name }} </span> <br>
+                            <span v-bind:style="{ color: user.color }">{{ user.name }} </span> <br>
                             <span v-if="checkIsAdmin()">{{ user.email }}</span>
                         </li>
                 </ul>

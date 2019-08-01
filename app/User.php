@@ -46,4 +46,11 @@ class User extends Authenticatable
     {
         return  $this->role === 'admin';
     }
+
+    public static function getRandColor() :string
+    {
+        $colors = ['#ed2213', '#2753e6',  '#7a55f2', '#9e03ff', '#050008', '#6e0c4b', '#0c97ed', '#4e5254', '#0d5e2a',  '#8a36a3', '#2f9c4a', '#a16d06'];
+        $randIndex = array_rand($colors);
+        return $colors[$randIndex];
+    }
 }
