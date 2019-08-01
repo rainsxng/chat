@@ -1915,6 +1915,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -48444,9 +48447,18 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.activeUser
-        ? _c("span", { staticClass: "text-muted m-3" }, [
-            _vm._v(_vm._s(_vm.activeUser.name) + " is typing...")
-          ])
+        ? _c(
+            "span",
+            {
+              staticClass: " ml-3 mt-3 mb-3 ",
+              style: { color: _vm.activeUser.color }
+            },
+            [_vm._v(_vm._s(_vm.activeUser.name))]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.activeUser
+        ? _c("span", { staticClass: "text-muted" }, [_vm._v(" is typing...")])
         : _vm._e()
     ]),
     _vm._v(" "),
@@ -48465,7 +48477,20 @@ var render = function() {
               _c("br"),
               _vm._v(" "),
               _vm.checkIsAdmin()
-                ? _c("span", [_vm._v(_vm._s(user.email))])
+                ? _c(
+                    "span",
+                    [
+                      _vm._v(_vm._s(user.email) + "\n                        "),
+                      user.role !== "admin"
+                        ? _c("mute-btn", { attrs: { user: user } })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      user.role !== "admin"
+                        ? _c("ban-btn", { attrs: { user: user } })
+                        : _vm._e()
+                    ],
+                    1
+                  )
                 : _vm._e()
             ])
           }),

@@ -27,7 +27,7 @@
 
 
             </div>
-            <span class="text-muted m-3" v-if="activeUser">{{activeUser.name}} is typing...</span>
+            <span class=" ml-3 mt-3 mb-3 " v-bind:style="{ color: activeUser.color }" v-if="activeUser">{{activeUser.name}}</span> <span v-if="activeUser" class="text-muted"> is typing...</span>
         </div>
         <div class="col-6">
             <div class="card card-default">
@@ -37,7 +37,10 @@
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
                             <span v-bind:style="{ color: user.color }">{{ user.name }} </span> <br>
-                            <span v-if="checkIsAdmin()">{{ user.email }}</span>
+                            <span v-if="checkIsAdmin()">{{ user.email }}
+                            <mute-btn v-if=" user.role !== 'admin' " :user="user"></mute-btn>
+                            <ban-btn v-if=" user.role !== 'admin' " :user="user"> </ban-btn>
+                                </span>
                         </li>
                 </ul>
             </div>
