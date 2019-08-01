@@ -80,7 +80,7 @@
                 .listen('UserBanned',(event) => {
                   if (this.user.id === event.user.id) {
                       Echo.disconnect();
-                      window.location.href = "/home";
+                      location.reload();
                   }
               })
                 .listen('UserMuted', ( event ) => {

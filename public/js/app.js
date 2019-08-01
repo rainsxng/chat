@@ -1948,7 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
     }).listen('UserBanned', function (event) {
       if (_this.user.id === event.user.id) {
         Echo.disconnect();
-        window.location.href = "/home";
+        location.reload();
       }
     }).listen('UserMuted', function (event) {
       if (_this.user.id === event.user.id) {
@@ -60069,10 +60069,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chat-scroll */ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js");
 /* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0__);
 /**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+* First we will load all of this project's JavaScript dependencies which
+* includes Vue and other libraries. It is a great starting point when
+* building robust, powerful web applications using Vue and Laravel.
+*/
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");

@@ -22,10 +22,10 @@ class ChatController extends Controller
     {
         if  ( auth()->user()->isAdmin())
             return view('chat.index')->with('users', User::where('role', '!=','admin')->get());
-        if (auth()->user()->isBanned) {
-            session()->flash('error', 'You has been banned at this chat');
-            return redirect('/home');
+        if (auth() ->user()->isBanned) {
+            return view('chat.ban');
         }
+        else
         return view('chat.index');
     }
 
@@ -51,13 +51,7 @@ class ChatController extends Controller
         $user = User::findOrFail($request->input('user.id'));
         $user->isBanned = !$user->isBanned;
         $user->save();
-        if ($user->isBanned) {
-            session()->flash('error', 'You has been banned at this chat');
-            broadcast(new UserBanned($user))->toOthers();
-        }
-        else {
-            broadcast(new UserUnbanned($user))->toOthers();
-        }
+        broadcast(new UserBanned($user))->toOthers();
         return ['status' => 'success'];
     }
 
