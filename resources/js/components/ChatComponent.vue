@@ -68,14 +68,14 @@
       },
       created() {
             this.currentUser = this.user;
-            this.fetchMessages();
+            this.fetchMessages();           //fetch all messages and users who wrote them from server
 
             Echo.join('chat')
-                .here(user => {
+                .here(user => {     //get all users , connected through websockets
                     this.users = user;
                 })
                 .joining(user => {
-                    this.users.push(user);
+                    this.users.push(user);          //when user join, add him to online users list and refresh his message color
                     this.messages.forEach( ( message ) => {
                         if (message.user.id === user.id) {
                             message.user.color = user.color;
@@ -83,13 +83,13 @@
                     })
                 })
                 .leaving(user => {
-                   this.users = this.users.filter(u => u.id !== user.id);
+                   this.users = this.users.filter(u => u.id !== user.id);   //when user leave chat , delete him from online users list
                 })
-                .listen('MessageSent',(event) => {
+                .listen('MessageSent',(event) => {      //when message delivered, push message with user who wrote it into chat
                     this.messages.push(event.message);
                 })
                 .listenForWhisper('typing', user => {
-                    this.activeUser = user;
+                    this.activeUser = user;     //show typing now hint
                     if(this.typingTimer) {
                         clearTimeout(this.typingTimer);
                     }
@@ -98,75 +98,77 @@
                     }, 1000);
                 })
                 .listen('UserBanned',(event) => {
-                  if (this.user.id === event.user.id) {
+                  if (this.user.id === event.user.id) {     //when user gets ban, disconnect him from websocket and reload page for banned user
                       Echo.disconnect();
                       location.reload();
                   }
               })
                 .listen('UserMuted' , ( event ) => {
                     this.users.forEach((chatUser) => {
-                        if (chatUser.id === event.user.id) {
+                        if (chatUser.id === event.user.id) {      //when user get mute , change status ismuted in vue component for buttons
                             chatUser.isMuted = event.user.isMuted;
                         }
                     });
-                    if (this.user.id === event.user.id) {
+                    if (this.user.id === event.user.id) {       //when user gets mute, change status ismuted for current user
                         this.currentUser.isMuted = event.user.isMuted;
                     }
                 })
       },
         methods: {
           fetchMessages() {
-                axios.get('/messages').then(response => {
+                // Get all messages and information about users who wrote it
+                 axios.get('/messages').then(response => {
                     this.messages = response.data;
             })
         },
-            checkIsAdmin (  ) {
+            checkIsAdmin ( ) {
                return this.user.role === 'admin';
             },
             showErrorMessage(message) {
+                //Generate error message for 2 second
                 if ($('#error').length) {
-                    $('#error').remove();
+                    $('#error').remove();       //First, remove error message , if it already exists
                 }
                 $('#messageList').append(`<div id="error" class="alert alert-warning alert-dismissible fade show" role="alert">
                  <strong>${message}</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
-                </div>`);
+                </div>`); //Create new one after chat
                 if(this.errorTimer) {
                     clearTimeout(this.errorTimer);
-                }
+                }       //Delete error message after 2 sec
                 this.errorTimer = setTimeout ( () => {
                     $('#error').alert('close')
                 }, 2000)
             },
             sendMessage() {
                 if ($('#message').val().length <= 1) {
-                    this.showErrorMessage('Message field should be required, and be at least 2 letters long');
+                    this.showErrorMessage('Message field should be required, and be at least 2 letters long'); //Check if message field is not empty
                 }
                 else {
                     axios.post('messages', {message: this.newMessage})
                         .then(() => {
                             this.messages.push({
                                 user: this.user,
-                                message: this.newMessage
+                                message: this.newMessage            // Send post request to server, then push message to chat
                             });
                             this.newMessage = '';
                             this.activeUser = false;
                         })
                         .catch((error) => {
-                           this.showErrorMessage(error.response.data)
+                           this.showErrorMessage(error.response.data)   //If there is some error, show user-friendly text in error message
                         });
 
                      $('#message').prop("disabled", true);
-                     setTimeout(() => {
+                     setTimeout(() => {         //disable input field for 15 seconds
                          $('#message').prop("disabled", false);
                      }, 15000)
                 }
             },
             sendTypingEvent () {
                 Echo.join('chat')
-                    .whisper('typing', this.user);
+                    .whisper('typing', this.user);      // send client event when user start typing
             }
       }
     }

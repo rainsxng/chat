@@ -1939,11 +1939,14 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.currentUser = this.user;
-    this.fetchMessages();
+    this.fetchMessages(); //fetch all messages and users who wrote them from server
+
     Echo.join('chat').here(function (user) {
+      //get all users , connected through websockets
       _this.users = user;
     }).joining(function (user) {
-      _this.users.push(user);
+      _this.users.push(user); //when user join, add him to online users list and refresh his message color
+
 
       _this.messages.forEach(function (message) {
         if (message.user.id === user.id) {
@@ -1953,11 +1956,12 @@ __webpack_require__.r(__webpack_exports__);
     }).leaving(function (user) {
       _this.users = _this.users.filter(function (u) {
         return u.id !== user.id;
-      });
+      }); //when user leave chat , delete him from online users list
     }).listen('MessageSent', function (event) {
+      //when message delivered, push message with user who wrote it into chat
       _this.messages.push(event.message);
     }).listenForWhisper('typing', function (user) {
-      _this.activeUser = user;
+      _this.activeUser = user; //show typing now hint
 
       if (_this.typingTimer) {
         clearTimeout(_this.typingTimer);
@@ -1968,17 +1972,20 @@ __webpack_require__.r(__webpack_exports__);
       }, 1000);
     }).listen('UserBanned', function (event) {
       if (_this.user.id === event.user.id) {
+        //when user gets ban, disconnect him from websocket and reload page for banned user
         Echo.disconnect();
         location.reload();
       }
     }).listen('UserMuted', function (event) {
       _this.users.forEach(function (chatUser) {
         if (chatUser.id === event.user.id) {
+          //when user get mute , change status ismuted in vue component for buttons
           chatUser.isMuted = event.user.isMuted;
         }
       });
 
       if (_this.user.id === event.user.id) {
+        //when user gets mute, change status ismuted for current user
         _this.currentUser.isMuted = event.user.isMuted;
       }
     });
@@ -1987,6 +1994,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
+      // Get all messages and information about users who wrote it
       axios.get('/messages').then(function (response) {
         _this2.messages = response.data;
       });
@@ -1995,15 +2003,17 @@ __webpack_require__.r(__webpack_exports__);
       return this.user.role === 'admin';
     },
     showErrorMessage: function showErrorMessage(message) {
+      //Generate error message for 2 second
       if ($('#error').length) {
-        $('#error').remove();
+        $('#error').remove(); //First, remove error message , if it already exists
       }
 
-      $('#messageList').append("<div id=\"error\" class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n             <strong>".concat(message, "</strong>\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n            <span aria-hidden=\"true\">&times;</span>\n            </button>\n            </div>"));
+      $('#messageList').append("<div id=\"error\" class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n             <strong>".concat(message, "</strong>\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n            <span aria-hidden=\"true\">&times;</span>\n            </button>\n            </div>")); //Create new one after chat
 
       if (this.errorTimer) {
         clearTimeout(this.errorTimer);
-      }
+      } //Delete error message after 2 sec
+
 
       this.errorTimer = setTimeout(function () {
         $('#error').alert('close');
@@ -2013,29 +2023,32 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       if ($('#message').val().length <= 1) {
-        this.showErrorMessage('Message field should be required, and be at least 2 letters long');
+        this.showErrorMessage('Message field should be required, and be at least 2 letters long'); //Check if message field is not empty
       } else {
         axios.post('messages', {
           message: this.newMessage
         }).then(function () {
           _this3.messages.push({
             user: _this3.user,
-            message: _this3.newMessage
+            message: _this3.newMessage // Send post request to server, then push message to chat
+
           });
 
           _this3.newMessage = '';
           _this3.activeUser = false;
         })["catch"](function (error) {
-          _this3.showErrorMessage(error.response.data);
+          _this3.showErrorMessage(error.response.data); //If there is some error, show user-friendly text in error message
+
         });
         $('#message').prop("disabled", true);
         setTimeout(function () {
+          //disable input field for 15 seconds
           $('#message').prop("disabled", false);
         }, 15000);
       }
     },
     sendTypingEvent: function sendTypingEvent() {
-      Echo.join('chat').whisper('typing', this.user);
+      Echo.join('chat').whisper('typing', this.user); // send client event when user start typing
     }
   }
 });
@@ -2113,6 +2126,7 @@ __webpack_require__.r(__webpack_exports__);
     Echo.join('chat').listen('UserMuted', function (event) {
       _this.dbUsers.forEach(function (dbUser) {
         if (dbUser.id === event.user.id) {
+          //when user gets mute, change isMuted status user in a list
           dbUser.isMuted = event.user.isMuted;
         }
       });
@@ -2121,9 +2135,11 @@ __webpack_require__.r(__webpack_exports__);
         if (dbUser.id === event.user.id) {
           dbUser.isBanned = event.user.isBanned;
         }
-      });
+      }); //when user gets ban, change isBanned status user in a list
+
     }).listen('UserRegistered', function (event) {
-      _this.dbUsers.push(event.user);
+      _this.dbUsers.push(event.user); //when user register, add him for "all users" list , which available only to admin
+
     });
   },
   data: function data() {

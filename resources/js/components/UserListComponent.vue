@@ -28,9 +28,8 @@
             this.dbUsers = this.users;
             Echo.join('chat')
                 .listen('UserMuted' , ( event ) => {
-
                     this.dbUsers.forEach((dbUser) => {
-                        if (dbUser.id === event.user.id) {
+                        if (dbUser.id === event.user.id) {   //when user gets mute, change isMuted status user in a list
                             dbUser.isMuted = event.user.isMuted;
                         }
                     })
@@ -40,10 +39,10 @@
                         if (dbUser.id === event.user.id) {
                             dbUser.isBanned = event.user.isBanned;
                         }
-                    })
+                    })  //when user gets ban, change isBanned status user in a list
                 })
                 .listen('UserRegistered', ( event ) => {
-                    this.dbUsers.push(event.user);
+                    this.dbUsers.push(event.user);      //when user register, add him for "all users" list , which available only to admin
                 })
 
         },

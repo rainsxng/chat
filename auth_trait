@@ -2,6 +2,7 @@
 
 namespace Illuminate\Foundation\Auth;
 
+use App\Events\UserRegistered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -58,8 +59,10 @@ trait AuthenticatesUsers
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'password' => Hash::make($request->input('password')),
-                    'color' => User::getRandColor()
+                    'color' => User::getRandColor(),
+                    'gravatar_img' => md5($request->input('email')),
                 ]);
+                broadcast(new UserRegistered($user));
             }
         }
 
@@ -79,7 +82,7 @@ trait AuthenticatesUsers
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|min:3|alpha_num|unique:users',
+            'name' => 'required|string|min:3|regex:/[a-zA-Z0-9\s]+/',
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
