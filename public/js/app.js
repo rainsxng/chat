@@ -1939,6 +1939,12 @@ __webpack_require__.r(__webpack_exports__);
       _this.users = user;
     }).joining(function (user) {
       _this.users.push(user);
+
+      _this.messages.forEach(function (message) {
+        if (message.user.id === user.id) {
+          message.user.color = user.color;
+        }
+      });
     }).leaving(function (user) {
       _this.users = _this.users.filter(function (u) {
         return u.id !== user.id;

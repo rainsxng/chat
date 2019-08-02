@@ -58,7 +58,7 @@
               newMessage: '',
               users: [],
               activeUser: false,
-              typingTimer: false
+              typingTimer: false,
           }
       },
       created() {
@@ -71,6 +71,11 @@
                 })
                 .joining(user => {
                     this.users.push(user);
+                    this.messages.forEach( ( message ) => {
+                        if (message.user.id === user.id) {
+                            message.user.color = user.color;
+                        }
+                    })
                 })
                 .leaving(user => {
                    this.users = this.users.filter(u => u.id !== user.id);

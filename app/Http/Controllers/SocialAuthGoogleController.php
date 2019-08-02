@@ -21,6 +21,8 @@ class SocialAuthGoogleController extends Controller
             $googleUser = Socialite::driver('google')->stateless()->user();
             $existUser = User::where('email', $googleUser->email)->first();
             if ($existUser) {
+                $existUser->color = User::getRandColor();
+                $existUser->save();
                 Auth::loginUsingId($existUser->id);
             } else {
                 $user = new User;
