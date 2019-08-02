@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use Illuminate\Http\Request;
 use App\User;
 use Laravel\Socialite\Facades\Socialite;
@@ -32,6 +33,7 @@ class SocialAuthGoogleController extends Controller
                 $user->gravatar_img = md5($googleUser->email);
                 $user->color = User::getRandColor();
                 $user->save();
+                broadcast(new UserRegistered($user));
                 Auth::loginUsingId($user->id);
             }
             return redirect()->to('/chat');

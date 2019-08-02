@@ -1921,6 +1921,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -1983,9 +1984,6 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    getImgUrl: function getImgUrl(hash) {
-      return "http://www.gravatar.com/avatar/".concat(hash, "?d=robohash&s=50");
-    },
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
@@ -2105,6 +2103,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['users'],
   created: function created() {
@@ -2123,6 +2122,8 @@ __webpack_require__.r(__webpack_exports__);
           dbUser.isBanned = event.user.isBanned;
         }
       });
+    }).listen('UserRegistered', function (event) {
+      _this.dbUsers.push(event.user);
     });
   },
   data: function data() {
@@ -48454,8 +48455,11 @@ var render = function() {
                 _c("span", [
                   _c("img", {
                     attrs: {
-                      src: _vm.getImgUrl(message.user.gravatar_img),
-                      alt: "user image"
+                      src:
+                        "http://www.gravatar.com/avatar/" +
+                        message.user.gravatar_img +
+                        "?d=robohash&s=50",
+                      alt: ""
                     }
                   })
                 ]),
@@ -48544,6 +48548,18 @@ var render = function() {
           "ul",
           _vm._l(_vm.users, function(user, index) {
             return _c("li", { key: index, staticClass: "py-1" }, [
+              _c("span", [
+                _c("img", {
+                  attrs: {
+                    src:
+                      "http://www.gravatar.com/avatar/" +
+                      user.gravatar_img +
+                      "?d=robohash&s=50",
+                    alt: ""
+                  }
+                })
+              ]),
+              _vm._v(" "),
               _c("span", { style: { color: user.color } }, [
                 _vm._v(_vm._s(user.name) + " ")
               ]),
@@ -48655,6 +48671,18 @@ var render = function() {
                   "li",
                   { key: index, staticClass: "py-2" },
                   [
+                    _c("span", [
+                      _c("img", {
+                        attrs: {
+                          src:
+                            "http://www.gravatar.com/avatar/" +
+                            user.gravatar_img +
+                            "?d=robohash&s=50",
+                          alt: ""
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c("span", { style: { color: user.color } }, [
                       _vm._v(_vm._s(user.name))
                     ]),

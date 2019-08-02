@@ -12,7 +12,7 @@
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
-                    <span> <img :src="getImgUrl(message.user.gravatar_img)" alt="user image"></span>
+                        <span> <img :src="'http://www.gravatar.com/avatar/' + message.user.gravatar_img + '?d=robohash&s=50'" alt=""></span>
                         <strong class="mr-1" v-bind:style="{ color: message.user.color }" >{{ message.user.name }}  </strong> <b>:</b>
                         <span v-bind:style="{ color: message.user.color }">{{ message.message }}</span>
                     </li>
@@ -39,6 +39,7 @@
             <div class="card-body">
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
+                            <span> <img :src="'http://www.gravatar.com/avatar/' + user.gravatar_img + '?d=robohash&s=50'" alt=""></span>
                             <span v-bind:style="{ color: user.color }">{{ user.name }} </span> <br>
                             <span v-if="checkIsAdmin()">{{ user.email }}
                             <mute-btn v-if=" user.role !== 'admin' " :user="user"></mute-btn>
@@ -114,15 +115,12 @@
                 })
       },
         methods: {
-          getImgUrl (hash) {
-                return `http://www.gravatar.com/avatar/${hash}?d=robohash&s=50`;
-           },
           fetchMessages() {
                 axios.get('/messages').then(response => {
                     this.messages = response.data;
             })
         },
-            checkIsAdmin ( ) {
+            checkIsAdmin (  ) {
                return this.user.role === 'admin';
             },
             showErrorMessage(message) {

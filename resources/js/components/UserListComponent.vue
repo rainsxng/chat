@@ -8,6 +8,7 @@
                 </div>
                 <ul>
                     <li class="py-2" v-for="(user, index) in dbUsers" :key="index">
+                        <span> <img :src="'http://www.gravatar.com/avatar/' + user.gravatar_img + '?d=robohash&s=50'" alt=""></span>
                         <span v-bind:style="{ color: user.color }">{{ user.name }}</span> <br> <span>{{ user.email }} </span>
                         <mute-btn :user="user"></mute-btn>
 
@@ -40,6 +41,9 @@
                             dbUser.isBanned = event.user.isBanned;
                         }
                     })
+                })
+                .listen('UserRegistered', ( event ) => {
+                    this.dbUsers.push(event.user);
                 })
 
         },
