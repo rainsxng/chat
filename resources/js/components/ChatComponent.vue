@@ -8,12 +8,13 @@
 <template>
     <div class="row">
         <div class="col-6">
-            <div class="card card-default">
+            <div class="card card-default" id="messageList">
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
                         <strong class="mr-1" v-bind:style="{ color: message.user.color }" >{{ message.user.name }}  </strong> <b>:</b>
                         <span v-bind:style="{ color: message.user.color }">{{ message.message }}</span>
+                        <span class="float-right">{{ message.created_at }}</span>
                     </li>
                 </ul>
                 <input v-if="!this.currentUser.isMuted" type="text" id="message" name="message" class="form-control p-2"
@@ -22,6 +23,8 @@
                        @keyup.enter="sendMessage"
                        @keydown="sendTypingEvent"
                        maxlength="200"
+                       minlength="2"
+                       required
                 >
                 <p class="ml-2 muted" v-else>You muted</p>
 
@@ -59,6 +62,7 @@
               users: [],
               activeUser: false,
               typingTimer: false,
+              errorTimer: false
           }
       },
       created() {
@@ -118,18 +122,43 @@
             checkIsAdmin ( ) {
                return this.user.role === 'admin';
             },
+            showErrorMessage(message) {
+                if ($('#error').length) {
+                    $('#error').remove();
+                }
+                $('#messageList').append(`<div id="error" class="alert alert-warning alert-dismissible fade show" role="alert">
+                 <strong>${message}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>`);
+                if(this.errorTimer) {
+                    clearTimeout(this.errorTimer);
+                }
+                this.errorTimer = setTimeout ( () => {
+                    $('#error').alert('close')
+                }, 2000)
+            },
             sendMessage() {
-                this.messages.push({
-                    user: this.user,
-                    message: this.newMessage
-                });
-                axios.post('messages', {message: this.newMessage});
-                this.newMessage='';
-                this.activeUser=false;
-                $('#message').prop("disabled", true);
-                setTimeout(() => {
-                    $('#message').prop("disabled", false);
-                }, 15000)
+                if ($('#message').val().length <= 1) {
+                    this.showErrorMessage('Message field should be required, and be at least 2 letters long');
+                }
+                else {
+                    this.messages.push({
+                        user: this.user,
+                        message: this.newMessage
+                    });
+                    axios.post('messages', {message: this.newMessage})
+                        .catch((error) => {
+                            this.showErrorMessage(error.response.data)
+                        });
+                    this.newMessage = '';
+                    this.activeUser = false;
+                     $('#message').prop("disabled", true);
+                     setTimeout(() => {
+                         $('#message').prop("disabled", false);
+                     }, 15000)
+                }
             },
             sendTypingEvent () {
                 Echo.join('chat')

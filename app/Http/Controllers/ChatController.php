@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Events\UserBanned;
-use App\Events\UserListUserBanned;
-use App\Events\UserListUserMuted;
 use App\Events\UserMuted;
-use App\Events\UserUnbanned;
-use App\Events\UserUnmuted;
+
+use App\Http\Requests\MessageSendMessageRequest;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Message;
 
@@ -27,42 +26,61 @@ class ChatController extends Controller
         if (auth() ->user()->isBanned) {
             return view('chat.ban');
         }
-        else
         return view('chat.index');
     }
 
     public function fetchMessages()
     {
-        return Message::with('user')->get();
+        if (!auth()->user()->isBanned) {
+            return Message::with('user')->get();
+        }
+        return \response('You was banned by admin', 403);
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage(MessageSendMessageRequest $request)
     {
-        $message = auth()->user()->messages()->create([
-            'message' => $request->message
-        ]);
+        if (!auth()->user()->isBanned && !auth()->user()->isMuted) {
+            $lastMessageDateInString = Message::where('user_id', '=', auth()->user()->id)->get(['created_at'])->last();
+            $lastMessageDate = Carbon::parse($lastMessageDateInString->created_at)->tz('Europe/Kiev');
+            $difference = Carbon::now()->diffInSeconds($lastMessageDate);
+            if ($difference > 15) {
+                $message = auth()->user()->messages()->create([
+                    'message' => $request->message
+                ]);
 
-        broadcast(new MessageSent($message->load('user')))->toOthers();
+                broadcast(new MessageSent($message->load('user')))->toOthers();
 
-        return ['status' => 'success'];
+                return ['status' => 'success'];
+            }
+            else {
+                return \response('Wait for 15 seconds', 400);
+            }
+        }
+        return \response('You cannot perform this action', 403);
     }
 
 
     public function banUser(Request $request)
     {
-        $user = User::findOrFail($request->input('user.id'));
-        $user->isBanned = !$user->isBanned;
-        $user->save();
-        broadcast(new UserBanned($user));
-        return ['status' => 'success'];
+        if (auth()->user()->isAdmin()) {
+            $user = User::findOrFail($request->input('user.id'));
+            $user->isBanned = !$user->isBanned;
+            $user->save();
+            broadcast(new UserBanned($user));
+            return ['status' => 'success'];
+        }
+        return \response('You cannot perform this action', 403);
     }
 
     public function muteUser(Request $request)
     {
-        $user = User::findOrFail($request->input('user.id'));
-        $user->isMuted = !$user->isMuted;
-        $user->save();
-        broadcast(new UserMuted($user));
-        return ['status' => 'success'];
+        if (auth()->user()->isAdmin()) {
+            $user = User::findOrFail($request->input('user.id'));
+            $user->isMuted = !$user->isMuted;
+            $user->save();
+            broadcast(new UserMuted($user));
+            return ['status' => 'success'];
+        }
+        return \response('You cannot perform this action', 403);
     }
 }

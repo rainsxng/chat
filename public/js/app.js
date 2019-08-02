@@ -1918,6 +1918,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -1927,7 +1930,8 @@ __webpack_require__.r(__webpack_exports__);
       newMessage: '',
       users: [],
       activeUser: false,
-      typingTimer: false
+      typingTimer: false,
+      errorTimer: false
     };
   },
   created: function created() {
@@ -1989,20 +1993,43 @@ __webpack_require__.r(__webpack_exports__);
     checkIsAdmin: function checkIsAdmin() {
       return this.user.role === 'admin';
     },
+    showErrorMessage: function showErrorMessage(message) {
+      if ($('#error').length) {
+        $('#error').remove();
+      }
+
+      $('#messageList').append("<div id=\"error\" class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n             <strong>".concat(message, "</strong>\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n            <span aria-hidden=\"true\">&times;</span>\n            </button>\n            </div>"));
+
+      if (this.errorTimer) {
+        clearTimeout(this.errorTimer);
+      }
+
+      this.errorTimer = setTimeout(function () {
+        $('#error').alert('close');
+      }, 2000);
+    },
     sendMessage: function sendMessage() {
-      this.messages.push({
-        user: this.user,
-        message: this.newMessage
-      });
-      axios.post('messages', {
-        message: this.newMessage
-      });
-      this.newMessage = '';
-      this.activeUser = false;
-      $('#message').prop("disabled", true);
-      setTimeout(function () {
-        $('#message').prop("disabled", false);
-      }, 15000);
+      var _this3 = this;
+
+      if ($('#message').val().length <= 1) {
+        this.showErrorMessage('Message field should be required, and be at least 2 letters long');
+      } else {
+        this.messages.push({
+          user: this.user,
+          message: this.newMessage
+        });
+        axios.post('messages', {
+          message: this.newMessage
+        })["catch"](function (error) {
+          _this3.showErrorMessage(error.response.data);
+        });
+        this.newMessage = '';
+        this.activeUser = false;
+        $('#message').prop("disabled", true);
+        setTimeout(function () {
+          $('#message').prop("disabled", false);
+        }, 15000);
+      }
     },
     sendTypingEvent: function sendTypingEvent() {
       Echo.join('chat').whisper('typing', this.user);
@@ -48404,74 +48431,84 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-6" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header p-2" }, [_vm._v("Messages")]),
-        _vm._v(" "),
-        _c(
-          "ul",
-          {
-            directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
-            staticClass: "list-unstyled",
-            staticStyle: { height: "300px", "overflow-y": "scroll" }
-          },
-          _vm._l(_vm.messages, function(message, index) {
-            return _c("li", { key: index, staticClass: "p-2" }, [
-              _c(
-                "strong",
-                { staticClass: "mr-1", style: { color: message.user.color } },
-                [_vm._v(_vm._s(message.user.name) + "  ")]
-              ),
-              _vm._v(" "),
-              _c("b", [_vm._v(":")]),
-              _vm._v(" "),
-              _c("span", { style: { color: message.user.color } }, [
-                _vm._v(_vm._s(message.message))
+      _c(
+        "div",
+        { staticClass: "card card-default", attrs: { id: "messageList" } },
+        [
+          _c("div", { staticClass: "card-header p-2" }, [_vm._v("Messages")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            {
+              directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
+              staticClass: "list-unstyled",
+              staticStyle: { height: "300px", "overflow-y": "scroll" }
+            },
+            _vm._l(_vm.messages, function(message, index) {
+              return _c("li", { key: index, staticClass: "p-2" }, [
+                _c(
+                  "strong",
+                  { staticClass: "mr-1", style: { color: message.user.color } },
+                  [_vm._v(_vm._s(message.user.name) + "  ")]
+                ),
+                _vm._v(" "),
+                _c("b", [_vm._v(":")]),
+                _vm._v(" "),
+                _c("span", { style: { color: message.user.color } }, [
+                  _vm._v(_vm._s(message.message))
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "float-right" }, [
+                  _vm._v(_vm._s(message.created_at))
+                ])
               ])
-            ])
-          }),
-          0
-        ),
-        _vm._v(" "),
-        !this.currentUser.isMuted
-          ? _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.newMessage,
-                  expression: "newMessage"
-                }
-              ],
-              staticClass: "form-control p-2",
-              attrs: {
-                type: "text",
-                id: "message",
-                name: "message",
-                placeholder: "Enter your message",
-                maxlength: "200"
-              },
-              domProps: { value: _vm.newMessage },
-              on: {
-                keyup: function($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                  ) {
-                    return null
+            }),
+            0
+          ),
+          _vm._v(" "),
+          !this.currentUser.isMuted
+            ? _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newMessage,
+                    expression: "newMessage"
                   }
-                  return _vm.sendMessage($event)
+                ],
+                staticClass: "form-control p-2",
+                attrs: {
+                  type: "text",
+                  id: "message",
+                  name: "message",
+                  placeholder: "Enter your message",
+                  maxlength: "200",
+                  minlength: "2",
+                  required: ""
                 },
-                keydown: _vm.sendTypingEvent,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                domProps: { value: _vm.newMessage },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.sendMessage($event)
+                  },
+                  keydown: _vm.sendTypingEvent,
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newMessage = $event.target.value
                   }
-                  _vm.newMessage = $event.target.value
                 }
-              }
-            })
-          : _c("p", { staticClass: "ml-2 muted" }, [_vm._v("You muted")])
-      ]),
+              })
+            : _c("p", { staticClass: "ml-2 muted" }, [_vm._v("You muted")])
+        ]
+      ),
       _vm._v(" "),
       _vm.activeUser
         ? _c(
