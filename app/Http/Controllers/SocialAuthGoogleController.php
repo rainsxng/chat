@@ -29,6 +29,7 @@ class SocialAuthGoogleController extends Controller
                 $user->name = $googleUser->name;
                 $user->email = $googleUser->email;
                 $user->google_id = $googleUser->id;
+                $user->gravatar_img = md5($googleUser->email);
                 $user->color = User::getRandColor();
                 $user->save();
                 Auth::loginUsingId($user->id);

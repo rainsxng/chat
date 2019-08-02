@@ -12,9 +12,9 @@
                 <div class="card-header p-2">Messages</div>
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
+                    <span> <img :src="getImgUrl(message.user.gravatar_img)" alt="user image"></span>
                         <strong class="mr-1" v-bind:style="{ color: message.user.color }" >{{ message.user.name }}  </strong> <b>:</b>
                         <span v-bind:style="{ color: message.user.color }">{{ message.message }}</span>
-                        <span class="float-right">{{ message.created_at }}</span>
                     </li>
                 </ul>
                 <input v-if="!this.currentUser.isMuted" type="text" id="message" name="message" class="form-control p-2"
@@ -114,7 +114,10 @@
                 })
       },
         methods: {
-        fetchMessages() {
+          getImgUrl (hash) {
+                return `http://www.gravatar.com/avatar/${hash}?d=robohash&s=50`;
+           },
+          fetchMessages() {
                 axios.get('/messages').then(response => {
                     this.messages = response.data;
             })
@@ -144,16 +147,19 @@
                     this.showErrorMessage('Message field should be required, and be at least 2 letters long');
                 }
                 else {
-                    this.messages.push({
-                        user: this.user,
-                        message: this.newMessage
-                    });
                     axios.post('messages', {message: this.newMessage})
+                        .then(() => {
+                            this.messages.push({
+                                user: this.user,
+                                message: this.newMessage
+                            });
+                            this.newMessage = '';
+                            this.activeUser = false;
+                        })
                         .catch((error) => {
-                            this.showErrorMessage(error.response.data)
+                           this.showErrorMessage(error.response.data)
                         });
-                    this.newMessage = '';
-                    this.activeUser = false;
+
                      $('#message').prop("disabled", true);
                      setTimeout(() => {
                          $('#message').prop("disabled", false);

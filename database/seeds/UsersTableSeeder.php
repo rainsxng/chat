@@ -16,7 +16,8 @@ class UsersTableSeeder extends Seeder
            'email' => 'admin@gmail.com',
            'role' => 'admin',
            'password' => bcrypt('password'),
-            'color' => \App\User::getRandColor(),
+           'color' => \App\User::getRandColor(),
+           'gravatar_img' =>md5('admin@gmail.com')
         ]);
     }
 }

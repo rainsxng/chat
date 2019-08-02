@@ -1983,6 +1983,9 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    getImgUrl: function getImgUrl(hash) {
+      return "http://www.gravatar.com/avatar/".concat(hash, "?d=robohash&s=50");
+    },
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
@@ -2014,17 +2017,19 @@ __webpack_require__.r(__webpack_exports__);
       if ($('#message').val().length <= 1) {
         this.showErrorMessage('Message field should be required, and be at least 2 letters long');
       } else {
-        this.messages.push({
-          user: this.user,
-          message: this.newMessage
-        });
         axios.post('messages', {
           message: this.newMessage
+        }).then(function () {
+          _this3.messages.push({
+            user: _this3.user,
+            message: _this3.newMessage
+          });
+
+          _this3.newMessage = '';
+          _this3.activeUser = false;
         })["catch"](function (error) {
           _this3.showErrorMessage(error.response.data);
         });
-        this.newMessage = '';
-        this.activeUser = false;
         $('#message').prop("disabled", true);
         setTimeout(function () {
           $('#message').prop("disabled", false);
@@ -48446,6 +48451,15 @@ var render = function() {
             },
             _vm._l(_vm.messages, function(message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
+                _c("span", [
+                  _c("img", {
+                    attrs: {
+                      src: _vm.getImgUrl(message.user.gravatar_img),
+                      alt: "user image"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
                 _c(
                   "strong",
                   { staticClass: "mr-1", style: { color: message.user.color } },
@@ -48456,10 +48470,6 @@ var render = function() {
                 _vm._v(" "),
                 _c("span", { style: { color: message.user.color } }, [
                   _vm._v(_vm._s(message.message))
-                ]),
-                _vm._v(" "),
-                _c("span", { staticClass: "float-right" }, [
-                  _vm._v(_vm._s(message.created_at))
                 ])
               ])
             }),

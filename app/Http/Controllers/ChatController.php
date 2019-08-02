@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Events\UserBanned;
 use App\Events\UserMuted;
-
 use App\Http\Requests\MessageSendMessageRequest;
 use App\User;
 use Carbon\Carbon;
@@ -21,8 +20,11 @@ class ChatController extends Controller
 
     public function index()
     {
-        if  ( auth()->user()->isAdmin())
-            return view('chat.index')->with('users', User::where('role', '!=','admin')->get());
+        if  ( auth()->user()->isAdmin()) {
+            $users = User::where('role', '!=', 'admin')->get();
+
+            return view('chat.index')->with('users', $users);
+        }
         if (auth() ->user()->isBanned) {
             return view('chat.ban');
         }
@@ -39,11 +41,18 @@ class ChatController extends Controller
 
     public function sendMessage(MessageSendMessageRequest $request)
     {
-        if (!auth()->user()->isBanned && !auth()->user()->isMuted) {
-            $lastMessageDateInString = Message::where('user_id', '=', auth()->user()->id)->get(['created_at'])->last();
-            $lastMessageDate = Carbon::parse($lastMessageDateInString->created_at)->tz('Europe/Kiev');
+        $lastMessageDateInString = Message::where('user_id', '=', auth()->user()->id)->get(['created_at'])->last();
+        if (empty($lastMessageDateInString))
+            $difference = 20;
+        else {
+            $lastMessageDate = Carbon::parse($lastMessageDateInString->created_at);
             $difference = Carbon::now()->diffInSeconds($lastMessageDate);
-            if ($difference > 15) {
+        }
+
+
+        if (!auth()->user()->isBanned && !auth()->user()->isMuted) {
+
+            if ($difference > 15 ) {
                 $message = auth()->user()->messages()->create([
                     'message' => $request->message
                 ]);
@@ -51,6 +60,7 @@ class ChatController extends Controller
                 broadcast(new MessageSent($message->load('user')))->toOthers();
 
                 return ['status' => 'success'];
+
             }
             else {
                 return \response('Wait for 15 seconds', 400);
