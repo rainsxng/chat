@@ -3,6 +3,9 @@
         color:red;
         font-size: 16px;
     }
+    .admin {
+        color:red;
+    }
 </style>
 
 <template>
@@ -13,8 +16,10 @@
                 <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
                     <li class="p-2" v-for="(message, index) in messages" :key="index">
                         <span> <img :src="'http://www.gravatar.com/avatar/' + message.user.gravatar_img + '?d=robohash&s=50'" alt=""></span>
+                        <span class="admin" v-if="checkIsAdmin(message.user)"> ADMIN </span>
                         <strong class="mr-1" v-bind:style="{ color: message.user.color }" >{{ message.user.name }}  </strong> <b>:</b>
                         <span v-bind:style="{ color: message.user.color }">{{ message.message }}</span>
+
                     </li>
                 </ul>
                 <input v-if="!this.currentUser.isMuted" type="text" id="message" name="message" class="form-control p-2"
@@ -40,10 +45,11 @@
                 <ul>
                         <li class="py-1" v-for="(user, index) in users" :key="index">
                             <span> <img :src="'http://www.gravatar.com/avatar/' + user.gravatar_img + '?d=robohash&s=50'" alt=""></span>
+                            <span class="admin" v-if="checkIsAdmin(user)"> ADMIN </span>
                             <span v-bind:style="{ color: user.color }">{{ user.name }} </span> <br>
-                            <span v-if="checkIsAdmin()">{{ user.email }}
-                            <mute-btn v-if=" user.role !== 'admin' " :user="user"></mute-btn>
-                            <ban-btn v-if=" user.role !== 'admin' " :user="user"> </ban-btn>
+                            <span v-if="checkIsAdmin(currentUser)">{{ user.email }}
+                            <mute-btn v-if="!checkIsAdmin(user)" :user="user"></mute-btn>
+                            <ban-btn v-if="!checkIsAdmin(user)" :user="user"> </ban-btn>
                                 </span>
                         </li>
                 </ul>
@@ -121,8 +127,8 @@
                     this.messages = response.data;
             })
         },
-            checkIsAdmin ( ) {
-               return this.user.role === 'admin';
+            checkIsAdmin ( user ) {
+               return user.role === 'admin';
             },
             showErrorMessage(message) {
                 //Generate error message for 2 second

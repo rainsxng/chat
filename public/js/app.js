@@ -1922,6 +1922,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -1999,8 +2005,8 @@ __webpack_require__.r(__webpack_exports__);
         _this2.messages = response.data;
       });
     },
-    checkIsAdmin: function checkIsAdmin() {
-      return this.user.role === 'admin';
+    checkIsAdmin: function checkIsAdmin(user) {
+      return user.role === 'admin';
     },
     showErrorMessage: function showErrorMessage(message) {
       //Generate error message for 2 second
@@ -6608,7 +6614,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.muted[data-v-80d584ac] {\n    color:red;\n    font-size: 16px;\n}\n", ""]);
+exports.push([module.i, "\n.muted[data-v-80d584ac] {\n    color:red;\n    font-size: 16px;\n}\n.admin[data-v-80d584ac] {\n    color:red;\n}\n", ""]);
 
 // exports
 
@@ -48480,6 +48486,10 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
+                _vm.checkIsAdmin(message.user)
+                  ? _c("span", { staticClass: "admin" }, [_vm._v(" ADMIN ")])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "strong",
                   { staticClass: "mr-1", style: { color: message.user.color } },
@@ -48576,22 +48586,26 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
+              _vm.checkIsAdmin(user)
+                ? _c("span", { staticClass: "admin" }, [_vm._v(" ADMIN ")])
+                : _vm._e(),
+              _vm._v(" "),
               _c("span", { style: { color: user.color } }, [
                 _vm._v(_vm._s(user.name) + " ")
               ]),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
-              _vm.checkIsAdmin()
+              _vm.checkIsAdmin(_vm.currentUser)
                 ? _c(
                     "span",
                     [
                       _vm._v(_vm._s(user.email) + "\n                        "),
-                      user.role !== "admin"
+                      !_vm.checkIsAdmin(user)
                         ? _c("mute-btn", { attrs: { user: user } })
                         : _vm._e(),
                       _vm._v(" "),
-                      user.role !== "admin"
+                      !_vm.checkIsAdmin(user)
                         ? _c("ban-btn", { attrs: { user: user } })
                         : _vm._e()
                     ],
