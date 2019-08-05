@@ -75,7 +75,6 @@
       created() {
             this.currentUser = this.user;
             this.fetchMessages();           //fetch all messages and users who wrote them from server
-
             Echo.join('chat')
                 .here(user => {     //get all users , connected through websockets
                     this.users = user;
@@ -122,10 +121,10 @@
       },
         methods: {
           fetchMessages() {
-                // Get all messages and information about users who wrote it
-                 axios.get('/messages').then(response => {
-                    this.messages = response.data;
-            })
+              // Get all messages and information about users who wrote it
+                     axios.get('/messages').then(response => {
+                        this.messages = response.data;
+                })
         },
             checkIsAdmin ( user ) {
                return user.role === 'admin';
@@ -146,7 +145,7 @@
                 }       //Delete error message after 2 sec
                 this.errorTimer = setTimeout ( () => {
                     $('#error').alert('close')
-                }, 2000)
+                }, 3000)
             },
             sendMessage() {
                 if ($('#message').val().length <= 1) {
@@ -163,7 +162,8 @@
                             this.activeUser = false;
                         })
                         .catch((error) => {
-                           this.showErrorMessage(error.response.data)   //If there is some error, show user-friendly text in error message
+                            console.log(error.response.data)
+                           //this.showErrorMessage(error.response.data)   //If there is some error, show user-friendly text in error message
                         });
 
                      $('#message').prop("disabled", true);

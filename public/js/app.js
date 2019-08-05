@@ -2023,7 +2023,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.errorTimer = setTimeout(function () {
         $('#error').alert('close');
-      }, 2000);
+      }, 3000);
     },
     sendMessage: function sendMessage() {
       var _this3 = this;
@@ -2043,8 +2043,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.newMessage = '';
           _this3.activeUser = false;
         })["catch"](function (error) {
-          _this3.showErrorMessage(error.response.data); //If there is some error, show user-friendly text in error message
-
+          console.log(error.response.data); //this.showErrorMessage(error.response.data)   //If there is some error, show user-friendly text in error message
         });
         $('#message').prop("disabled", true);
         setTimeout(function () {
@@ -60981,10 +60980,8 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "anyKey",
-  wsHost: window.location.hostname,
-  wsPort: 6001,
-  disableStats: true
+  key: 'f9f40cf997f823b3b131',
+  cluster: 'eu'
 });
 
 /***/ }),
